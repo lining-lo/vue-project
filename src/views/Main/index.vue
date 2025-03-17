@@ -1,9 +1,13 @@
 <template>
     <div>
         <el-container>
-            <el-aside width="200px"><component-aside /></el-aside>
+            <el-aside width="200px">
+                <component-aside />
+            </el-aside>
             <el-container>
-                <el-header>Header</el-header>
+                <el-header>
+                    <component-header />
+                </el-header>
                 <el-main>
                     <router-view></router-view>
                 </el-main>
@@ -15,12 +19,18 @@
 
 <script>
 import ComponentAside from '@/components/ComponentAside.vue';
+import ComponentHeader from '@/components/ComponentHeader.vue';
 export default {
     name: 'Main',
     components: {
-        ComponentAside
+        ComponentAside,
+        ComponentHeader
     }
 }
 </script>
 
-<style></style>
+<style lang="less" scoped>
+.el-header {
+    padding: 0;
+}
+</style>
