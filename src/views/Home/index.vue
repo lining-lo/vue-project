@@ -21,7 +21,15 @@
       </el-card>
     </el-col>
     <el-col :span="16">
-      <div class="grid-content bg-purple-light"></div>
+      <div class="num">
+        <el-card v-for="item in countData" :key="item.name" :body-style="{ display:'flex',padding:0 }">
+        <i class="icon" :style="{ background:item.color }" :class="`el-icon-${item.icon}`"></i>
+        <div class="detail">
+          <p class="price">￥{{ item.value }}</p>
+          <p class="desc">{{ item.name }}</p>
+        </div>
+      </el-card>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -74,7 +82,45 @@ export default {
         todayBuy:'今日购买',
         monthBuy:'本月购买',
         totalBuy:'总共购买'
-      }
+      },
+      countData:[
+        {
+          name: "今日支付订单",
+          value: 1234,
+          icon: "success",
+          color: "#2ec7c9",
+        },
+        {
+          name: "今日收藏订单",
+          value: 210,
+          icon: "star-on",
+          color: "#ffb980",
+        },
+        {
+          name: "今日未支付订单",
+          value: 1234,
+          icon: "s-goods",
+          color: "#5ab1ef",
+        },
+        {
+          name: "本月支付订单",
+          value: 1234,
+          icon: "success",
+          color: "#2ec7c9",
+        },
+        {
+          name: "本月收藏订单",
+          value: 210,
+          icon: "star-on",
+          color: "#ffb980",
+        },
+        {
+          name: "本月未支付订单",
+          value: 1234,
+          icon: "s-goods",
+          color: "#5ab1ef",
+        },
+      ],
     }
   }
 }
@@ -116,6 +162,40 @@ export default {
     span {
       color: #666;
       margin-left: 60px;
+    }
+  }
+}
+
+.num{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .el-card{
+    width: 32%;
+    margin-bottom: 20px;
+  }
+  .icon{
+    width: 80px;
+    height: 80px;
+    font-size: 30px;
+    text-align: center;
+    line-height: 80px;
+    color:#fff
+  }
+  .detail{
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .price{
+      font-size: 30px;
+      margin-bottom: 10px;
+      line-height: 30px;
+    }
+    .desc{
+      font-size: 14px;
+      color: #999;
+      text-align: center;
     }
   }
 }
