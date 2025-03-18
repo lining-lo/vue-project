@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-container>
-            <el-aside width="200px">
+            <el-aside width="auto">
                 <component-aside />
             </el-aside>
             <el-container>
@@ -33,4 +33,5 @@ export default {
 .el-header {
     padding: 0;
 }
+
 </style>

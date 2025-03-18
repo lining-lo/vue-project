@@ -2,7 +2,7 @@
   <div>
     <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
       :collapse="isCollapse" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-      <h3>通用后台管理系统</h3>
+      <h3>{{ isCollapse?'后台':'通用后台管理系统' }}</h3>
       <el-menu-item @click="clickMenu(item)" v-for="item in noChildren" :key="item.name" :index="item.name">
         <i :class="`el-icon-${item.icon}`"></i>
         <span slot="title">{{ item.label }}</span>
@@ -13,7 +13,7 @@
           <span slot="title">{{ item.label }}</span>
         </template>
         <el-menu-item-group v-for="subItem in item.children" :key="subItem.path">
-          <el-menu-item @click="clickMenu(subItem)"  :index="subItem.path">{{ subItem.label }}</el-menu-item>
+          <el-menu-item @click="clickMenu(subItem)" :index="subItem.path">{{ subItem.label }}</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
@@ -21,11 +21,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'ComponentAside',
   data() {
     return {
-      isCollapse: false,
       menuData: [
         {
           path: '/home',
@@ -80,7 +80,7 @@ export default {
       console.log(key, keyPath);
     },
     //点击菜单按钮切换路由
-    clickMenu(item){
+    clickMenu(item) {
       this.$router.push(item.path)
     }
   },
@@ -92,6 +92,10 @@ export default {
     //有子菜单
     hasChildren() {
       return this.menuData.filter(item => item.children)
+    },
+    //解构仓库中的state
+    isCollapse(){
+      return this.$store.state.tab.isCollapse
     }
   }
 }
@@ -102,10 +106,12 @@ export default {
   width: 200px;
   min-height: 400px;
 }
-.el-menu{
+
+.el-menu {
   height: 100vh;
-  h3{
-    color:#fff;
+  border-right: none;
+  h3 {
+    color: #fff;
     font-size: 16px;
     font-weight: 400;
     line-height: 48px;
