@@ -14,6 +14,11 @@
           <p>上次登录的地点：<span>武汉</span></p>
         </div>
       </el-card>
+      <el-card class="box-card" style="margin-top: 20px;height: 460px;">
+        <el-table :data="tableData" style="width: 100%">
+          <el-table-column v-for="(v,k) in tableLabel" :prop="k" :label="v" />
+        </el-table>
+      </el-card>
     </el-col>
     <el-col :span="16">
       <div class="grid-content bg-purple-light"></div>
@@ -23,40 +28,93 @@
 
 <script>
 export default {
-  name: 'Home'
+  name: 'Home',
+  data() {
+    return {
+      tableData: [
+        {
+          name: "Java",
+          todayBuy: 100,
+          monthBuy: 200,
+          totalBuy: 300,
+        },
+        {
+          name: "Python",
+          todayBuy: 100,
+          monthBuy: 200,
+          totalBuy: 300,
+        },
+        {
+          name: "Mysql",
+          todayBuy: 100,
+          monthBuy: 200,
+          totalBuy: 300,
+        },
+        {
+          name: "Html",
+          todayBuy: 100,
+          monthBuy: 200,
+          totalBuy: 300,
+        },
+        {
+          name: "Web",
+          todayBuy: 100,
+          monthBuy: 200,
+          totalBuy: 300,
+        },
+        {
+          name: "Php",
+          todayBuy: 100,
+          monthBuy: 200,
+          totalBuy: 300,
+        }
+      ],
+      tableLabel:{
+        name:'课程',
+        todayBuy:'今日购买',
+        monthBuy:'本月购买',
+        totalBuy:'总共购买'
+      }
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
-.user{
-  display:flex;
+.user {
+  display: flex;
   align-items: center;
   padding-bottom: 20px;
   margin-bottom: 20px;
   border-bottom: 1px solid #ccc;
-  img{
+
+  img {
     width: 150px;
     height: 150px;
-    border-radius:50%;
+    border-radius: 50%;
     margin-right: 40px;
   }
-  .userInfo{
-    .name{
+
+  .userInfo {
+    .name {
       font-size: 32px;
       margin-bottom: 10px;
     }
-    .access{
+
+    .access {
       color: #999;
     }
   }
 }
-.loginInfo{
-  p{
+
+.loginInfo {
+  p {
     line-height: 28px;
     font-size: 14px;
     color: #999;
-    span{
-      color:#666;
+
+    span {
+      color: #666;
       margin-left: 60px;
     }
   }
