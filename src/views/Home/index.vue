@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="8">
+    <el-col :span="8" style="padding-right: 10px;">
       <el-card class="box-card">
         <div class="user">
           <img src="../../assets/images/user.png" alt="">
@@ -20,7 +20,7 @@
         </el-table>
       </el-card>
     </el-col>
-    <el-col :span="16">
+    <el-col :span="16" style="padding-left: 10px;">
       <div class="num">
         <el-card v-for="item in countData" :key="item.name" :body-style="{ display:'flex',padding:0 }">
         <i class="icon" :style="{ background:item.color }" :class="`el-icon-${item.icon}`"></i>
@@ -29,6 +29,13 @@
           <p class="desc">{{ item.name }}</p>
         </div>
       </el-card>
+      </div>
+      <el-card style="height: 280px;">
+
+      </el-card>
+      <div class="graph">
+        <el-card style="height: 260px;"></el-card>
+        <el-card style="height: 260px;"></el-card>
       </div>
     </el-col>
   </el-row>
@@ -40,44 +47,7 @@ export default {
   name: 'Home',
   data() {
     return {
-      tableData: [
-        {
-          name: "Java",
-          todayBuy: 100,
-          monthBuy: 200,
-          totalBuy: 300,
-        },
-        {
-          name: "Python",
-          todayBuy: 100,
-          monthBuy: 200,
-          totalBuy: 300,
-        },
-        {
-          name: "Mysql",
-          todayBuy: 100,
-          monthBuy: 200,
-          totalBuy: 300,
-        },
-        {
-          name: "Html",
-          todayBuy: 100,
-          monthBuy: 200,
-          totalBuy: 300,
-        },
-        {
-          name: "Web",
-          todayBuy: 100,
-          monthBuy: 200,
-          totalBuy: 300,
-        },
-        {
-          name: "Php",
-          todayBuy: 100,
-          monthBuy: 200,
-          totalBuy: 300,
-        }
-      ],
+      tableData: [],
       tableLabel:{
         name:'课程',
         todayBuy:'今日购买',
@@ -125,8 +95,9 @@ export default {
     }
   },
   mounted(){
-    getData().then((data)=>{
-      console.log(data)
+    getData().then(({data})=>{
+     const tableData = data.tableData
+      this.tableData = tableData
     })
   }
 }
@@ -203,6 +174,15 @@ export default {
       color: #999;
       text-align: center;
     }
+  }
+}
+
+.graph{
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  .el-card{
+    width: 48%;
   }
 }
 </style>
