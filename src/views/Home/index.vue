@@ -39,7 +39,10 @@
           <!-- 柱状图 -->
           <div ref="echarts2" style="height:260px"></div>
         </el-card>
-        <el-card style="height: 260px;"></el-card>
+        <el-card style="height: 260px;">
+          <!-- 饼状图 -->
+          <div ref="echarts3" style="height:240px"></div>
+        </el-card>
       </div>
     </el-col>
   </el-row>
@@ -101,10 +104,10 @@ export default {
   },
   mounted() {
     getData().then(({ data }) => {
-      const { tableData, orderData, userData } = data
+      const { tableData, orderData, userData, videoData } = data
       this.tableData = tableData
       console.log(orderData);
-      
+
 
       // 使用Echart图表--折线图
       // 基于准备好的dom，初始化echarts实例
@@ -190,6 +193,32 @@ export default {
       }
       // 使用刚指定的配置项和数据显示图表。
       echarts2.setOption(echarts2Option);
+
+      // 使用Echart图表--饼状图
+      // 基于准备好的dom，初始化echarts实例
+      var echarts3 = echarts.init(this.$refs.echarts3);
+      // 指定图表的配置项和数据
+      var echarts3Option = {
+        tooltip: {
+          trigger: "item",
+        },
+        legend: {},
+        color: [
+          "#0f78f4",
+          "#dd536b",
+          "#9462e5",
+          "#a6a6a6",
+          "#e1bb22",
+          "#39c362",
+          "#3ed1cf",
+        ],
+        series: [{
+          data:videoData,
+          type:'pie'
+        }]
+      }
+      // 使用刚指定的配置项和数据显示图表。
+      echarts3.setOption(echarts3Option);
     })
   }
 }
