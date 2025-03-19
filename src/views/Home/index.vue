@@ -16,22 +16,23 @@
       </el-card>
       <el-card class="box-card" style="margin-top: 20px;height: 460px;">
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column v-for="(v,k) in tableLabel" :prop="k" :label="v" />
+          <el-table-column v-for="(v, k) in tableLabel" :prop="k" :label="v" />
         </el-table>
       </el-card>
     </el-col>
     <el-col :span="16" style="padding-left: 10px;">
       <div class="num">
-        <el-card v-for="item in countData" :key="item.name" :body-style="{ display:'flex',padding:0 }">
-        <i class="icon" :style="{ background:item.color }" :class="`el-icon-${item.icon}`"></i>
-        <div class="detail">
-          <p class="price">￥{{ item.value }}</p>
-          <p class="desc">{{ item.name }}</p>
-        </div>
-      </el-card>
+        <el-card v-for="item in countData" :key="item.name" :body-style="{ display: 'flex', padding: 0 }">
+          <i class="icon" :style="{ background: item.color }" :class="`el-icon-${item.icon}`"></i>
+          <div class="detail">
+            <p class="price">￥{{ item.value }}</p>
+            <p class="desc">{{ item.name }}</p>
+          </div>
+        </el-card>
       </div>
       <el-card style="height: 280px;">
-
+        <!-- 折线图 -->
+        <div ref="echarts1" style="height: 280px;"></div>
       </el-card>
       <div class="graph">
         <el-card style="height: 260px;"></el-card>
@@ -43,18 +44,19 @@
 
 <script>
 import { getData } from '../../api';
+import * as echarts from 'echarts'
 export default {
   name: 'Home',
   data() {
     return {
       tableData: [],
-      tableLabel:{
-        name:'课程',
-        todayBuy:'今日购买',
-        monthBuy:'本月购买',
-        totalBuy:'总共购买'
+      tableLabel: {
+        name: '课程',
+        todayBuy: '今日购买',
+        monthBuy: '本月购买',
+        totalBuy: '总共购买'
       },
-      countData:[
+      countData: [
         {
           name: "今日支付订单",
           value: 1234,
@@ -94,10 +96,38 @@ export default {
       ],
     }
   },
-  mounted(){
-    getData().then(({data})=>{
-     const tableData = data.tableData
+  mounted() {
+    getData().then(({ data }) => {
+      const tableData = data.tableData
       this.tableData = tableData
+
+      // 使用Echart图表
+      // 基于准备好的dom，初始化echarts实例
+      var echarts1 = echarts.init(this.$refs.echarts1);
+      // 指定图表的配置项和数据
+      var echarts1Option = {
+        legend: {
+          data: []
+        },
+        xAxis: {
+          data: []
+        },
+        yAxis: {},
+        series: []
+      }
+      // 准备数据
+      const xAxis = Object.keys(data.orderData.data[0])
+      echarts1Option.legend.data = xAxis
+      echarts1Option.xAxis.data = xAxis
+      xAxis.forEach(key => {
+        echarts1Option.series.push({
+          name: key,
+          type: 'line',
+          data: data.orderData.data.map((item)=> item[key])
+        })
+      })
+      // 使用刚指定的配置项和数据显示图表。
+      echarts1.setOption(echarts1Option);
     })
   }
 }
@@ -143,33 +173,38 @@ export default {
   }
 }
 
-.num{
+.num {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  .el-card{
+
+  .el-card {
     width: 32%;
     margin-bottom: 20px;
   }
-  .icon{
+
+  .icon {
     width: 80px;
     height: 80px;
     font-size: 30px;
     text-align: center;
     line-height: 80px;
-    color:#fff
+    color: #fff
   }
-  .detail{
+
+  .detail {
     margin-left: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    .price{
+
+    .price {
       font-size: 30px;
       margin-bottom: 10px;
       line-height: 30px;
     }
-    .desc{
+
+    .desc {
       font-size: 14px;
       color: #999;
       text-align: center;
@@ -177,11 +212,12 @@ export default {
   }
 }
 
-.graph{
+.graph {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
-  .el-card{
+
+  .el-card {
     width: 48%;
   }
 }
