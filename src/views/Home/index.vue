@@ -35,7 +35,10 @@
         <div ref="echarts1" style="height: 280px;"></div>
       </el-card>
       <div class="graph">
-        <el-card style="height: 260px;"></el-card>
+        <el-card style="height: 260px;">
+          <!-- 柱状图 -->
+          <div ref="echarts2" style="height:260px"></div>
+        </el-card>
         <el-card style="height: 260px;"></el-card>
       </div>
     </el-col>
@@ -98,10 +101,12 @@ export default {
   },
   mounted() {
     getData().then(({ data }) => {
-      const tableData = data.tableData
+      const { tableData, orderData, userData } = data
       this.tableData = tableData
+      console.log(orderData);
+      
 
-      // 使用Echart图表
+      // 使用Echart图表--折线图
       // 基于准备好的dom，初始化echarts实例
       var echarts1 = echarts.init(this.$refs.echarts1);
       // 指定图表的配置项和数据
@@ -116,18 +121,75 @@ export default {
         series: []
       }
       // 准备数据
-      const xAxis = Object.keys(data.orderData.data[0])
+      const xAxis = Object.keys(orderData.data[0])
       echarts1Option.legend.data = xAxis
-      echarts1Option.xAxis.data = xAxis
+      echarts1Option.xAxis.data = orderData.date
       xAxis.forEach(key => {
         echarts1Option.series.push({
           name: key,
           type: 'line',
-          data: data.orderData.data.map((item)=> item[key])
+          data: orderData.data.map((item) => item[key])
         })
       })
       // 使用刚指定的配置项和数据显示图表。
       echarts1.setOption(echarts1Option);
+
+      // 使用Echart图表--柱状图
+      // 基于准备好的dom，初始化echarts实例
+      var echarts2 = echarts.init(this.$refs.echarts2);
+      // 指定图表的配置项和数据
+      var echarts2Option = {
+        // 图例文字颜色
+        textStyle: {
+          color: "#333",
+        },
+        legend: {},
+        grid: {
+          left: "20%",
+        },
+        // 提示框
+        tooltip: {
+          trigger: "axis",
+        },
+        xAxis: {
+          type: "category", // 类目轴
+          data: userData.map(item => item.date),
+          axisLine: {
+            lineStyle: {
+              color: "#17b3a3",
+            },
+          },
+          axisLabel: {
+            interval: 0,
+            color: "#333",
+          },
+        },
+        yAxis: [
+          {
+            type: "value",
+            axisLine: {
+              lineStyle: {
+                color: "#17b3a3",
+              },
+            },
+          },
+        ],
+        color: ["#2ec7c9", "#b6a2de", "#5ab1ef", "#ffb980", "#d87a80", "#8d98b3"],
+        series: [
+          {
+            name: '新增用户',
+            type: 'bar',
+            data: userData.map(item => item.new)
+          },
+          {
+            name: '活跃用户',
+            type: 'bar',
+            data: userData.map(item => item.active)
+          }
+        ],
+      }
+      // 使用刚指定的配置项和数据显示图表。
+      echarts2.setOption(echarts2Option);
     })
   }
 }

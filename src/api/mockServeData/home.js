@@ -126,7 +126,7 @@ export default {
                       monthBuy: 3000,
                       totalBuy: 22000,
                     },
-                  ],
+                ],
             },
         };
     }
