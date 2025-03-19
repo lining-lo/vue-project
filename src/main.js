@@ -7,6 +7,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 import router from './router'
 //引入vuex
 import store from './store'
+//测试请求
+import { getData } from './api';
+getData()
 
 Vue.use(ElementUI)
 
