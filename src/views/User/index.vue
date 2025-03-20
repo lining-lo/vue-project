@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { getUserList } from '../../api'
 export default {
     name: 'User',
     data() {
@@ -79,6 +80,10 @@ export default {
             //关闭弹窗
             this.dialogVisible = false
         }
+    },
+    mounted() {
+        console.log(getUserList());
+        
     }
 }
 </script>

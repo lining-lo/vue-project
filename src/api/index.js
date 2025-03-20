@@ -1,6 +1,24 @@
 import requests from './request'
 
 //请求首页数据
-export const getData = ()=>{
+export const getData = () => {
     return requests.get('/home/getData')
+}
+
+//用户组件相关接口
+//新增用户
+export const addUser=(user)=>{
+    return requests.post('/user/addUser',user)
+}
+//删除用户
+export const deleteUser = (id) => {
+    return requests.post('/user/deleteUser',id)
+}
+//修改用户
+export const editUser=(user)=>{
+    return requests.post('/user/editUser',user)
+}
+//获取用户列表
+export const getUserList = () => {
+    return requests.get('/user/getUserData')
 }
