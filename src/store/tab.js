@@ -21,10 +21,15 @@ export default {
             if (value.name !== 'home') {
                 const index = state.tabList.findIndex(item => item.name === value.name)
                 //点击同一菜单不更新
-                if(index === -1){
+                if (index === -1) {
                     state.tabList.push(value)
                 }
             }
+        },
+        //删除指定tag数据
+        closeTag(state, tag) {
+            const index = state.tabList.findIndex(item => tag.name === item.name)
+            state.tabList.splice(index,1)
         }
     }
 }

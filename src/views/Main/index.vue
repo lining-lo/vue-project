@@ -8,6 +8,7 @@
                 <el-header>
                     <component-header />
                 </el-header>
+                <component-tag />
                 <el-main>
                     <router-view></router-view>
                 </el-main>
@@ -20,11 +21,13 @@
 <script>
 import ComponentAside from '@/components/ComponentAside.vue';
 import ComponentHeader from '@/components/ComponentHeader.vue';
+import ComponentTag from '@/components/ComponentTag.vue';
 export default {
     name: 'Main',
     components: {
         ComponentAside,
-        ComponentHeader
+        ComponentHeader,
+        ComponentTag
     }
 }
 </script>

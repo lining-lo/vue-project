@@ -16,47 +16,52 @@ Vue.use(VueRouter)
 //第三个参数：失败的回调
 const originPush = VueRouter.prototype.push
 const originReplace = VueRouter.prototype.replace
-VueRouter.prototype.push = function(lacation,resolve,reject){
-    if(resolve&&reject){
-        originPush.call(this,location,resolve,reject)
-    }else{
-        originPush.call(this,lacation,()=>{},()=>{})
+VueRouter.prototype.push = function (lacation, resolve, reject) {
+    if (resolve && reject) {
+        originPush.call(this, location, resolve, reject)
+    } else {
+        originPush.call(this, lacation, () => { }, () => { })
     }
 }
-VueRouter.prototype.replace = function(location,resolve,reject){
-    if (resolve&&reject) {
-        originReplace.call(this,location,resolve,reject)
-    }else{
-        originReplace.call(this,location,()=>{},()=>{})
+VueRouter.prototype.replace = function (location, resolve, reject) {
+    if (resolve && reject) {
+        originReplace.call(this, location, resolve, reject)
+    } else {
+        originReplace.call(this, location, () => { }, () => { })
     }
 }
 
 export default new VueRouter({
-    routes:[
+    routes: [
         {
-            path:'/',
-            component:Main,
-            redirect:'/home',
-            children:[
+            path: '/',
+            component: Main,
+            redirect: '/home',
+            children: [
                 {
-                    path:'home',
-                    component:Home
+                    name: 'home',
+                    path: 'home',
+                    component: Home
                 },
                 {
-                    path:'user',
-                    component:User
+                    name: 'user',
+                    path: 'user',
+                    component: User
                 },
                 {
-                    path:'mall',
-                    component:Mall
+                    name: 'mall',
+                    path: 'mall',
+                    component: Mall
                 },
                 {
-                    path:'page1',
-                    component:PageOne
+                    name: 'page1',
+                    path: 'page1',
+                    component: PageOne
                 },
                 {
-                    path:'page2',
-                    component:PageTwo
+                    name: 'page2',
+                    path: 'page2',
+                    component: PageTwo
                 }
             ]
         }
