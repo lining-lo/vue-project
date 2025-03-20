@@ -106,8 +106,6 @@ export default {
     getData().then(({ data }) => {
       const { tableData, orderData, userData, videoData } = data
       this.tableData = tableData
-      console.log(orderData);
-
 
       // 使用Echart图表--折线图
       // 基于准备好的dom，初始化echarts实例
