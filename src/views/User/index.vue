@@ -1,7 +1,8 @@
 <template>
     <div class="manage">
         <!-- dialog提示框 -->
-        <el-dialog title="提示" :before-close="handleClose" :visible.sync="dialogVisible" width="50%">
+        <el-dialog :title="modalType === 0 ? '新增用户' : '修改用户'" :before-close="handleClose" :visible.sync="dialogVisible"
+            width="50%">
             <!-- form表单 -->
             <el-form ref="form" :rules="rules" :inline="true" :model="form" label-width="80px">
                 <el-form-item prop="name" label="姓名">
@@ -12,12 +13,12 @@
                 </el-form-item>
                 <el-form-item prop="sex" label="性别">
                     <el-select v-model="form.sex" placeholder="请选择">
-                        <el-option label="男" value="1"></el-option>
-                        <el-option label="女" value="0"></el-option>
+                        <el-option label="男" :value="1"></el-option>
+                        <el-option label="女" :value="0"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item prop="birth" label="出生日期">
-                    <el-date-picker v-model="form.birth" type="date" placeholder="选择日期">
+                    <el-date-picker value-format="yyyy-MM-dd" v-model="form.birth" type="date" placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item prop="addr" label="地址">
@@ -27,11 +28,11 @@
             <!-- 底部的确定|取消按钮 -->
             <span slot="footer" class="dialog-footer">
                 <el-button @click="handleClose">取 消</el-button>
-                <el-button type="primary" @click="submit">确 定</el-button>
+                <el-button type="primary" @click="submit()">确 定</el-button>
             </span>
         </el-dialog>
         <div class="manage-header">
-            <el-button type="primary" @click="dialogVisible = true">+新增</el-button>
+            <el-button type="primary" @click="handleAdd()">+新增</el-button>
             <!-- 用户列表表格 -->
             <el-table :data="tableData" style="width: 100%">
                 <el-table-column prop="name" label="姓名"></el-table-column>
@@ -55,14 +56,18 @@
 </template>
 
 <script>
-import { getUserList } from '../../api'
+import { getUserList, addUser, editUser, deleteUser } from '../../api'
 export default {
     name: 'User',
     data() {
         return {
             //控制弹出框显示与隐藏
             dialogVisible: false,
-            //新增用户表单数据
+            //用户列表数据
+            tableData: [],
+            //控制弹窗的类型
+            modalType: 0,//0新增，1编辑
+            //新增|修改用户表单信息
             form: {
                 name: '',
                 age: '',
@@ -78,19 +83,29 @@ export default {
                 birth: [{ required: true, message: '请选择日期' }],
                 addr: [{ required: true, message: '请输入地址' }]
             },
-            //用户列表数据
-            tableData: []
         };
     },
     methods: {
-        //提交新增用户表单的方法
+        //新增|修改用户的方法
         submit() {
             //表单校验
             this.$refs.form.validate((valid) => {
                 //通过校验
                 if (valid) {
                     //对后续数据进行处理
-                    console.log('form', this.form);
+                    //新增用户
+                    if (this.modalType === 0) {
+                        addUser(this.form).then(() => {
+                            //重新获取用户列表
+                            this.getList()
+                        })
+                        //修改用户
+                    } else {
+                        editUser(this.form).then(() => {
+                            //重新获取用户列表
+                            this.getList()
+                        })
+                    }
                     //清空数据
                     this.$refs.form.resetFields()
                     //关闭弹窗
@@ -105,20 +120,56 @@ export default {
             //关闭弹窗
             this.dialogVisible = false
         },
-        //修改用户的方法
+        //获取用户列表的方法
+        getList() {
+            getUserList().then(({ data }) => {
+                this.tableData = data.list
+            })
+        },
+        //处理新增弹窗的方法
+        handleAdd() {
+            //打开弹窗
+            this.dialogVisible = true
+            //设置弹窗类型为新增0
+            this.modalType = 0
+        },
+        //处理修改弹窗并回显数据方法
         handleEdit(row) {
-            console.log('修改用户的方法');
+            //打开弹窗
+            this.dialogVisible = true
+            //设置弹窗类型为修改
+            this.modalType = 1,
+            //回显数据,注意需要对当前数据进行深拷贝
+            this.form = JSON.parse(JSON.stringify(row))
         },
         //删除用户的方法
         handleDelete(row) {
-            console.log('删除用户的方法');
+            this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                //删除用户 
+                deleteUser({ id: row.id }).then(() => {
+                    //提示信息
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    //重新获取用户列表
+                    this.getList()
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         }
     },
     mounted() {
-        getUserList().then(({ data }) => {
-            //取出获取用户列表的数据
-            this.tableData = data.list
-        })
+        //取出用户列表数据
+        this.getList()
     }
 }
 </script>
