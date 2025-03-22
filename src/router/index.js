@@ -7,6 +7,7 @@ import User from '../views/User'
 import Mall from '../views/Mall'
 import PageOne from '../views/PageOne'
 import PageTwo from '../views/PageTwo'
+import Login from '../views/Login'
 
 Vue.use(VueRouter)
 
@@ -64,6 +65,10 @@ export default new VueRouter({
                     component: PageTwo
                 }
             ]
+        },
+        {
+            path: '/login',
+            component: Login,
         }
     ]
 })
