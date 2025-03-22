@@ -33,8 +33,19 @@
         </el-dialog>
         <div class="manage-header">
             <el-button type="primary" @click="handleAdd()">+新增</el-button>
+            <!-- 搜索表单 -->
+            <el-form ref="searchForm" :model="form" label-width="80px" inline>
+                <el-form-item>
+                    <el-input placeholder="请输入搜索姓名" v-model="searchForm.name"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSearch">搜索</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="common-table">
             <!-- 用户列表表格 -->
-            <el-table :data="tableData" style="width: 100%">
+            <el-table stripe :data="tableData" height="90%" style="width: 100%">
                 <el-table-column prop="name" label="姓名"></el-table-column>
                 <el-table-column prop="age" label="年龄"></el-table-column>
                 <el-table-column prop="sex" label="性别">
@@ -51,6 +62,11 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 分页 -->
+            <div class="pager">
+                <el-pagination layout="prev, pager, next" :total="total" @current-change="handlePage">
+                </el-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -67,6 +83,17 @@ export default {
             tableData: [],
             //控制弹窗的类型
             modalType: 0,//0新增，1编辑
+            //分页的页数
+            total: 0,
+            //分页的参数
+            pageData: {
+                page: 1,
+                limit: 10
+            },
+            //搜索表单数据
+            searchForm: {
+                name: ''
+            },
             //新增|修改用户表单信息
             form: {
                 name: '',
@@ -120,10 +147,13 @@ export default {
             //关闭弹窗
             this.dialogVisible = false
         },
-        //获取用户列表的方法
+        //获取用户列表|分页的方法
         getList() {
-            getUserList().then(({ data }) => {
+            getUserList({ params: {...this.searchForm,...this.pageData} }).then(({ data }) => {
+                //用户列表数据
                 this.tableData = data.list
+                //分页页数
+                this.total = data.count || 0
             })
         },
         //处理新增弹窗的方法
@@ -139,8 +169,8 @@ export default {
             this.dialogVisible = true
             //设置弹窗类型为修改
             this.modalType = 1,
-            //回显数据,注意需要对当前数据进行深拷贝
-            this.form = JSON.parse(JSON.stringify(row))
+                //回显数据,注意需要对当前数据进行深拷贝
+                this.form = JSON.parse(JSON.stringify(row))
         },
         //删除用户的方法
         handleDelete(row) {
@@ -165,6 +195,15 @@ export default {
                     message: '已取消删除'
                 });
             });
+        },
+        //选择页码时的回调
+        handlePage(currentPage) {
+            this.pageData.page = currentPage
+            this.getList()
+        },
+        //搜索用户的方法
+        onSearch(){
+            this.getList()
         }
     },
     mounted() {
@@ -174,4 +213,23 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="less" scoped>
+.manage {
+    height: 90%;
+    .manage-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .common-table {
+        position: relative;
+        height: calc(100% - 62px);
+
+        .pager {
+            position: absolute;
+            bottom: 0;
+            right: 20px;
+        }
+    }
+}
+</style>

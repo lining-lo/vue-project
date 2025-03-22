@@ -19,6 +19,6 @@ export const editUser=(user)=>{
     return requests.post('/user/editUser',user)
 }
 //获取用户列表
-export const getUserList = () => {
-    return requests.get('/user/getUserData')
+export const getUserList = (params) => {
+    return requests.get('/user/getUserData',params)
 }
