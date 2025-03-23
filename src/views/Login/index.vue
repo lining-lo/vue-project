@@ -16,6 +16,9 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
+import Mock from 'mockjs';
+
 export default {
     name: 'Login',
     data() {
@@ -35,8 +38,12 @@ export default {
     methods: {
         //登录的方法
         onSubmit() {
-            console.log('登录的方法');
-
+            //获取token
+            const token = Mock.Random.guid()
+            //存入cookie
+            Cookies.set('token',token)
+            //跳转到首页
+            this.$router.push('home')
         }
     }
 }
