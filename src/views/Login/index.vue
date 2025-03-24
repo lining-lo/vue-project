@@ -47,8 +47,12 @@ export default {
                     getMenu(this.loginForm).then((data) => {
                         //判断响应的结果
                         if (data.code === 200) {
-                            //存入cookie
+                            //将token存入cookie
                             Cookies.set('token', data.data.token)
+                            //将动态的menu菜单数据存入仓库
+                            this.$store.commit('setMenu',data.data.menuList)
+                            //调用仓库中动态创建路由的方法
+                            this.$store.commit('addMenu',this.$router)
                             //跳转到首页
                             this.$router.push('home')
                         } else {

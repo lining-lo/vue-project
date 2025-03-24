@@ -37,4 +37,7 @@ new Vue({
   router,
   store,
   render: h => h(App),
+  mounted(){
+    store.commit('addMenu',router)
+  }
 }).$mount('#app')

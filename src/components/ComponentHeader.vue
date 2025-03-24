@@ -36,6 +36,8 @@ export default {
             if (command === 'logout') {
                 //清除cookie中的token
                 Cookies.remove('token')
+                //清除cookie中的menu
+                Cookies.remove('menu')
                 //跳转到登录页面
                 this.$router.push('login')
             }

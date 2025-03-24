@@ -1,3 +1,4 @@
+import Cookies from "js-cookie"
 export default {
     state: {
         isCollapse: false,//控制菜单的展开与收起
@@ -8,7 +9,9 @@ export default {
             label: '首页',
             icon: 's-home',
             url: '/home'
-        }]
+        }],
+        //动态的左侧菜单数据
+        menuList: [],
     },
     mutations: {
         //修改菜单展开与收起的方法
@@ -29,7 +32,42 @@ export default {
         //删除指定tag数据
         closeTag(state, tag) {
             const index = state.tabList.findIndex(item => tag.name === item.name)
-            state.tabList.splice(index,1)
+            state.tabList.splice(index, 1)
+        },
+        //更新左侧菜单数据的方法
+        setMenu(state, value) {
+            //更新数据
+            state.menuList = value
+            //存入cookie
+            Cookies.set('menu', JSON.stringify(value))
+        },
+        //动态添加路由的方法
+        addMenu(state, router) {
+            const menu = JSON.parse(Cookies.get('menu'))
+            //判断缓存中是否有数据
+            if (!menu) return
+            state.menuList = menu
+            
+            //组装动态路由的数据
+            const menuArray = []
+            menu.forEach(item => {
+                //有Childen项
+                if (item.children) {
+                    item.children = item.children.map(item => {
+                        item.component = () => import(`../views/${item.url}`)
+                        return item
+                    })
+                    menuArray.push(...item.children)
+                }else{
+                    item.component = () => import(`../views/${item.url}`)
+                    menuArray.push(item)
+                }
+            });
+            console.log(menuArray);
+            
+            menuArray.forEach(item => {
+                router.addRoute('Main',item)
+            })
         }
     }
 }

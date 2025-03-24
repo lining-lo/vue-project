@@ -30,9 +30,6 @@ export default {
             //删除后的跳转逻辑
             //删除的不是当前路由---不跳转
             let length = this.tags.length
-            console.log('length', length, '--index', index);
-
-
             if (tag.name !== this.$route.name) {
                 return
             }

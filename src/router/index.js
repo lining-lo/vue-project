@@ -36,34 +36,35 @@ export default new VueRouter({
     routes: [
         {
             path: '/',
+            name:'Main',
             component: Main,
             redirect: '/home',
             children: [
-                {
-                    name: 'home',
-                    path: 'home',
-                    component: Home
-                },
-                {
-                    name: 'user',
-                    path: 'user',
-                    component: User
-                },
-                {
-                    name: 'mall',
-                    path: 'mall',
-                    component: Mall
-                },
-                {
-                    name: 'page1',
-                    path: 'page1',
-                    component: PageOne
-                },
-                {
-                    name: 'page2',
-                    path: 'page2',
-                    component: PageTwo
-                }
+                // {
+                //     name: 'home',
+                //     path: 'home',
+                //     component: Home
+                // },
+                // {
+                //     name: 'user',
+                //     path: 'user',
+                //     component: User
+                // },
+                // {
+                //     name: 'mall',
+                //     path: 'mall',
+                //     component: Mall
+                // },
+                // {
+                //     name: 'page1',
+                //     path: 'page1',
+                //     component: PageOne
+                // },
+                // {
+                //     name: 'page2',
+                //     path: 'page2',
+                //     component: PageTwo
+                // }
             ]
         },
         {

@@ -41,14 +41,14 @@ export default {
                   name: 'page1',
                   label: '页面1',
                   icon: 'setting',
-                  url: 'Page1'
+                  url: 'PageOne'
                 },
                 {
                   path: '/page2',
                   name: 'page2',
                   label: '页面2',
                   icon: 'setting',
-                  url: 'Page2'
+                  url: 'PageTwo'
                 }
               ]
             }
