@@ -22,3 +22,9 @@ export const editUser=(user)=>{
 export const getUserList = (params) => {
     return requests.get('/user/getUserData',params)
 }
+
+//权限相关接口
+//用户登录接口
+export const getMenu = (data)=>{
+    return requests.post('/permission/getMenu/',data)
+}

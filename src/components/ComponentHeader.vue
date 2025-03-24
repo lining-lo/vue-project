@@ -4,17 +4,17 @@
             <el-button style="margin-right: 10px;" @click="handleMenu" icon="el-icon-menu" size="mini"></el-button>
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item v-for="item in tabList" :key="item.path" :to="{ path: item.path }">{{ item.label
-                }}</el-breadcrumb-item>
+                    }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="r-content">
-            <el-dropdown>
+            <el-dropdown @command="handleCommand">
                 <span class="el-dropdown-link">
                     <img class="user" src="../assets/images/user.png" alt="">
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>个人中心</el-dropdown-item>
-                    <el-dropdown-item>退出</el-dropdown-item>
+                    <el-dropdown-item command="logout">退出</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -23,12 +23,22 @@
 
 <script>
 import { mapState } from 'vuex'
+import Cookies from 'js-cookie'
 export default {
     name: 'componentHeader',
     methods: {
+        //菜单展开与折叠的方法
         handleMenu() {
-            //调用菜单展开与折叠的方法
             this.$store.commit('collapseMenu')
+        },
+        //用户退出的方法
+        handleCommand(command) {
+            if (command === 'logout') {
+                //清除cookie中的token
+                Cookies.remove('token')
+                //跳转到登录页面
+                this.$router.push('login')
+            }
         }
     },
     computed: {
